@@ -29,3 +29,22 @@ Ensure you have Verilator installed on your Linux system:
 ```bash
 sudo apt-get update
 sudo apt-get install verilator
+
+
+### Build and Run
+1. Translate SV to C++ and link the testbench (ignoring unused upper instruction bits):
+```bash
+verilator -Wall -Wno-UNUSEDSIGNAL --cc bp_trace_encoder.sv --exe sim_main.cpp
+
+2. Build the executable:
+```bash
+make -j -C obj_dir -f Vbp_trace_encoder.mk Vbp_trace_encoder
+
+3. Run
+```bash
+./obj_dir/Vbp_trace_encoder
+
+### Output
+
+*(Screenshot of the Output Generated)*
+![Terminal run](images/test_output.png)
