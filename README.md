@@ -24,27 +24,55 @@ The drafted SystemVerilog interface is designed to be instantiated directly alon
 
 This repository includes a cycle-accurate C++ testbench (`sim_main.cpp`) to verify the SystemVerilog RTL (`bp_trace_encoder.sv`) using Verilator. The simulation proves the encoder successfully filters out linear control flow (e.g., standard ALU operations) and correctly triggers trace packets only on non-linear branches.
 
+## Architecture Overview
+
+The trace encoder taps the BlackParrot backend commit stage and filters non-linear control flow instructions.
+
+**Pipeline:**
+BlackParrot Backend -> Trace Encoder (Branch Detection -> PC Delta Calculation -> Packet Output) -> AXI Stream -> Host Decoder
+
+## Signals Used from BlackParrot
+
+| Signal | Source | Purpose |
+| :--- | :--- | :--- |
+| `commit_v_o` | Backend pipeline | Valid commit indicator |
+| `commit_pkt.pc` | commit packet | Program counter |
+| `instr.t.btype` | instruction decode | Branch detection |
+| `instr.t.jtype` | instruction decode | Jump detection |
+
+## Next Steps
+
+* Integrate with full `bp_be_commit_pkt_s`
+* Add VLE compression stage
+* Add elastic FIFO
+* Connect to ZynqParrot AXI stream
+
 ### Prerequisites
 Ensure you have Verilator installed on your Linux system:
 ```bash
 sudo apt-get update
 sudo apt-get install verilator
+```
 
 
 ### Build and Run
 1. Translate SV to C++ and link the testbench (ignoring unused upper instruction bits):
 ```bash
-verilator -Wall -Wno-UNUSEDSIGNAL --cc bp_trace_encoder.sv --exe sim_main.cpp
+verilator -Wall -Wno-UNUSEDSIGNAL --cc rtl/bp_trace_encoder.sv --exe sim/sim_main.cpp
+```
 
 2. Build the executable:
 ```bash
 make -j -C obj_dir -f Vbp_trace_encoder.mk Vbp_trace_encoder
+```
 
 3. Run
 ```bash
 ./obj_dir/Vbp_trace_encoder
+```
 
 ### Output
 
 *(Screenshot of the Output Generated)*
 ![Terminal run](images/test_output.png)
+

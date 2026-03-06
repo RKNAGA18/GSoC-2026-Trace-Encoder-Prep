@@ -28,7 +28,7 @@ module bp_trace_encoder_tb;
   initial begin
     // Initialize system
     clk_i = 0; reset_i = 1; commit_v_i = 0; commit_pc_i = 0; commit_instr_i = 0;
-    
+    $monitor("Time: %0t | Commit_V: %b | Opcode: %7b | PC: %h || Trace_Valid: %b | Trace_Packet: %h", $time, commit_v_i, commit_instr_i[6:0], commit_pc_i, trace_valid_o, trace_packet_o);
     // Release reset after 10 units
     #10 reset_i = 0;
 
