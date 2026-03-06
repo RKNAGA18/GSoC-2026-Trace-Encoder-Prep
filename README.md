@@ -28,6 +28,8 @@ This repository includes a cycle-accurate C++ testbench (`sim_main.cpp`) to veri
 
 The trace encoder taps the BlackParrot backend commit stage and filters non-linear control flow instructions.
 
+![Trace Encoder Architecture](docs/architecture_diagram.png)
+
 **Pipeline:**
 BlackParrot Backend -> Trace Encoder (Branch Detection -> PC Delta Calculation -> Packet Output) -> AXI Stream -> Host Decoder
 
