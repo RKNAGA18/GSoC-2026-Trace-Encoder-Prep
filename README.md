@@ -13,7 +13,7 @@ To avoid tracing linear `PC+4` execution, the encoder must monitor the commit st
 3. **Branch Detection:** Extracted `instr.t.btype` and `instr.t.jtype` directly from the commit packet to trigger the trace generation.
 
 *(Screenshot of the BlackParrot Backend commit packet inside GTKWave showing the `btype` isolation)*
-![GTKWave B-Type Signals](images/gtkwave_btype_commit.png)
+![GTKWave B-Type Signals](docs/images/gtkwave_btype_commit.png)
 
 ## Integration Plan
 The drafted SystemVerilog interface is designed to be instantiated directly alongside the commit logic (e.g., within `bp_be_top.sv`). It intercepts the `commit_pkt`, filters the instruction opcode (e.g., `1100011` for B-Type), calculates the PC Delta, and generates a valid trace packet to be routed via AXI to the Zynq PS.
@@ -76,5 +76,5 @@ make -j -C obj_dir -f Vbp_trace_encoder.mk Vbp_trace_encoder
 ### Output
 
 *(Screenshot of the Output Generated)*
-![Terminal run](images/test_output.png)
+![Terminal run](docs/images/test_output.png)
 
