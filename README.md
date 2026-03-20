@@ -36,7 +36,7 @@ By non-intrusively binding to the `commit_pkt`, filtering for non-linear control
 ![Trace Encoder Architecture](docs/after_architecture.png)
 
 **Pipeline:**
-BlackParrot Backend -> Trace Encoder (Branch Detection -> PC Delta Calculation -> Packet Output) -> AXI Stream -> Host Decoder
+BlackParrot Backend (via Non-Intrusive Bind) -> Trace Encoder (Branch Detection -> PC Delta Calculation -> Packet Output) -> AXI4-Stream -> Zynq PS Host Decoder
 
 ## Signals Used from BlackParrot
 
