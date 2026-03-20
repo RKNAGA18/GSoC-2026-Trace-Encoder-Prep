@@ -25,10 +25,15 @@ The drafted SystemVerilog interface is designed to be instantiated directly alon
 This repository includes a cycle-accurate C++ testbench (`sim_main.cpp`) to verify the SystemVerilog RTL (`bp_trace_encoder.sv`) using Verilator. The simulation proves the encoder successfully filters out linear control flow (e.g., standard ALU operations) and correctly triggers trace packets only on non-linear branches.
 
 ## Architecture Overview
+Based on maintainer feedback, the observability network abandons intrusive RTL routing. Instead, it taps into BlackParrot's existing commit stage using a non-intrusive SystemVerilog `bind` interface.
 
-The trace encoder taps the BlackParrot backend commit stage and filters non-linear control flow instructions.
+### Current State (The Bandwidth Bottleneck)
+Extracting uncompressed, 64-bit PC data every cycle creates a massive bandwidth bottleneck across the FPGA-to-Host interface.
+![Naive Trace Export](docs/before_architecture.jpg)
 
-![Trace Encoder Architecture](docs/architecture_diagram1.png)
+### Proposed Architecture (Non-Intrusive Trace Encoder)
+By non-intrusively binding to the `commit_pkt`, filtering for non-linear control flow (branches/jumps), and applying Variable Length Encoding (VLE), the trace payload is drastically compressed before hitting the AXI stream.
+![Trace Encoder Architecture](docs/after_architecture.jpg)
 
 **Pipeline:**
 BlackParrot Backend -> Trace Encoder (Branch Detection -> PC Delta Calculation -> Packet Output) -> AXI Stream -> Host Decoder
