@@ -29,11 +29,11 @@ Based on maintainer feedback, the observability network abandons intrusive RTL r
 
 ### Current State (The Bandwidth Bottleneck)
 Extracting uncompressed, 64-bit PC data every cycle creates a massive bandwidth bottleneck across the FPGA-to-Host interface.
-![Naive Trace Export](docs/after_architecture.png)
+![Naive Trace Export](docs/before_architecture.png)
 
 ### Proposed Architecture (Non-Intrusive Trace Encoder)
 By non-intrusively binding to the `commit_pkt`, filtering for non-linear control flow (branches/jumps), and applying Variable Length Encoding (VLE), the trace payload is drastically compressed before hitting the AXI stream.
-![Trace Encoder Architecture](docs/after_architecture.jpg)
+![Trace Encoder Architecture](docs/after_architecture.png)
 
 **Pipeline:**
 BlackParrot Backend -> Trace Encoder (Branch Detection -> PC Delta Calculation -> Packet Output) -> AXI Stream -> Host Decoder
